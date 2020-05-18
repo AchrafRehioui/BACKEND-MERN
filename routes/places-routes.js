@@ -17,11 +17,23 @@ const D_PLACES = [
 ];
 
 router.get('/:pid', (req, res, next) => {
-  const placeId = req.params.pid; // { pid: 'p1' }
+  const placeId = req.params.pid; 
+
   const place = D_PLACES.find(p => {
+
     return p.id === placeId;
+
   });
-  res.json({place}); // => { place } => { place: place }
+   if(!place) {
+
+     const error = new Error ('Could not find a place for the id giving');
+     error.code = 404;
+     throw error;
+
+   }
+
+  res.json({ place }); 
+
 });
 
 router.get('/user/:uid', (req, res, next) => {
@@ -32,6 +44,14 @@ router.get('/user/:uid', (req, res, next) => {
 
     return p.creator === userId;
   });
+
+  if(!place) {
+    
+    const error = new Error ('Could not find a place for user id. ');
+    error.code = 404;
+    return next(error);
+
+  }
 
   res.json({ place });
 });
