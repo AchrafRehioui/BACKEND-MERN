@@ -36,29 +36,30 @@ const D_PLACES = [
   
   };
   
-  const getPlaceByUserId = (req, res, next) => {
+  const getPlacesByUserId = (req, res, next) => {
   
     const userId = req.params.uid;
   
-    const place = D_PLACES.find( p => {
+    const places = D_PLACES.filter( p => {
   
       return p.creator === userId;
+
     });
   
-    if(!place) {
+    if(!places || places.length === 0) {
   
      return next ( 
-       new HttpError ('Could not find a place for user id. ', 404)
+       new HttpError ('Could not find  places for user id. ', 404)
        );
       
     }
   
-    res.json({ place });
+    res.json({ places });
   };
 
   const createPlace = (req, res, next) => {
     const { title, description, coordinates, address, creator } = req.body;
-    const createPlace = {
+    const createdPlace = {
       id: uuid(),
       title,
       description,
@@ -70,8 +71,26 @@ const D_PLACES = [
     res.status(201).json({place: createdPlace});
 
   };
+   
+ const updatePlace = (req, res, next) => {
 
-  exports.getPlaceById = getPlaceById;
-  exports.getPlaceByUserId = getPlaceByUserId;
-  exports.createPlace = createPlace;
+  const { title, description } = req.body;
+  const placeId = req.params.pid;
+
+  const updatedPlace =  { ...D_PLACES.find( p => p.id  === placeId) };
+  const placeIndex = D_PLACES.findIndex( p => p.id  === placeId);
+  
+  updatePlace.title = title;
+  updatePlace.description = description;
+
+  D_PLACES[placeIndex] = updatedPlace;
+  res.status(200).json({place: updatedPlace});
+
+ }; 
+
+const deletePlace = (req, res, next) => {};
+
+exports.getPlaceById = getPlaceById;
+exports.getPlacesByUserId = getPlaceByUserId;
+exports.createPlace = createPlace;
   
