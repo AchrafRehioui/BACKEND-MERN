@@ -68,29 +68,35 @@ const D_PLACES = [
       creator
     };
     D_PLACES.push(createdPlace);
-    res.status(201).json({place: createdPlace});
+    res.status(201).json({ place: createdPlace });
 
   };
    
- const updatePlace = (req, res, next) => {
-
-  const { title, description } = req.body;
-  const placeId = req.params.pid;
+  const updatePlace = (req, res, next) => {
+    const { title, description } = req.body;
+    const placeId = req.params.pid;
 
   const updatedPlace =  { ...D_PLACES.find( p => p.id  === placeId) };
   const placeIndex = D_PLACES.findIndex( p => p.id  === placeId);
   
-  updatePlace.title = title;
-  updatePlace.description = description;
+  updatedPlace.title = title;
+  updatedPlace.description = description;
 
   D_PLACES[placeIndex] = updatedPlace;
   res.status(200).json({place: updatedPlace});
 
  }; 
 
-const deletePlace = (req, res, next) => {};
+const deletePlace = (req, res, next) => {
+
+  const placeId = req.params.pid;
+  D_PLACES = D_PLACES.filter(p => p.id !== placeId );
+  res.status(200).json({ message: 'Deleted place.' });
+
+};
 
 exports.getPlaceById = getPlaceById;
-exports.getPlacesByUserId = getPlaceByUserId;
+exports.getPlacesByUserId = getPlacesByUserId;
 exports.createPlace = createPlace;
+exports.deletePlace = deletePlace;
   
