@@ -1,10 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const placesRoutes = require('./routes/places-routes');
 const usersRoutes = require('./routes/users-routes');
 const HttpError = require('./models/http-error');
-
+const mongoose = require('mongoose');
 const app = express();
 
 app.use(bodyParser.json());
@@ -25,4 +24,13 @@ app.use((error, req, res, next) => {
   res.json({message: error.message || 'An unknown error occurred!'});
 });
 
-app.listen(5000);
+mongoose
+  .connect('mongodb+srv://ach:AWIT123@cluster0-zwsdb.mongodb.net/places?retryWrites=true&w=majority',{useCreateIndex:true,})
+  .then(() =>{
+    app.listen(5000);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
+
