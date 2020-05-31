@@ -5,17 +5,13 @@ const usersRoutes = require('./routes/users-routes');
 const HttpError = require('./models/http-error');
 const mongoose = require('mongoose');
 const app = express();
-
 app.use(bodyParser.json());
-
 app.use('/api/places', placesRoutes); 
 app.use('/api/users', usersRoutes);
-
 app.use((req, res, next) => {
   const error = new HttpError('Could not find this route.', 404);
   throw error;
 });
-
 app.use((error, req, res, next) => {
   if (res.headerSent) {
     return next(error);
@@ -25,7 +21,7 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect('mongodb+srv://ach:AWIT123@cluster0-zwsdb.mongodb.net/places?retryWrites=true&w=majority',{useCreateIndex:true,})
+  .connect('mongodb+srv://xxx:xxxxxxxx@cluster0-zwsdb.mongodb.net/places?retryWrites=true&w=majority',{useCreateIndex:true,})
   .then(() =>{
     app.listen(5000);
   })
